@@ -6,7 +6,7 @@
 		"ExampleClientMixin",
 		"KeyboardInputMixin",
 		"SplashScreenMixin",
-		"PacketListernerMixin"
+		"ClientPlayNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
