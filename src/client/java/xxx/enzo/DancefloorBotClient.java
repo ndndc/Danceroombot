@@ -28,10 +28,17 @@ import org.lwjgl.glfw.GLFW;
 public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean GlassFound = false;
 	public static BlockPos BlockPosition = new BlockPos(0, 0, 0);
-	private static boolean botEnabled = false; // Variable to track bot status
+	public static boolean botEnabled = false; // Variable to track bot status
 	public static boolean walkForward = false;
+	public static boolean walkBackwards = false;
+	public static boolean walkLeft = false;
+	public static boolean walkRight = false;
 
 	private static void onStartTick(MinecraftServer server) {
+		walkForward = false;
+		walkBackwards = false;
+		walkLeft = false;
+		walkRight = false;
 		if (!botEnabled) return; // Only execute if bot is enabled
 
 		BlockPos closest_glass = new BlockPos(0, 0, 0);
@@ -40,6 +47,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 		ClientPlayerEntity pe = MinecraftClient.getInstance().player;
 
 		if(pe != null) {
+			if(botEnabled)pe.setYaw(0);
 			found_glass = false;
 			for (int y = -2; y < 2; y++)
 				for (int x = -7; x < 7; x++)
@@ -74,8 +82,28 @@ public class DancefloorBotClient implements ClientModInitializer {
 				//pe.setYaw((float)uwu - 270);
 				Vec3d diff = new Vec3d(b.getX()+.5f,b.getY(),b.getZ()+.5f).subtract(a);
 				diff = new Vec3d(Math.min(1,diff.getX()),Math.min(1,diff.getY()),Math.min(1,diff.getZ()));
-				pe.setYaw((float)uwu-270.0f);
-				walkForward = ((Math.abs(diff.getX()) > .2f || Math.abs(diff.getZ()) > .2f) && GlassFound);
+				//pe.setYaw((float)uwu-270.0f);
+
+
+				if((Math.abs(diff.getX()) > .2f || Math.abs(diff.getZ()) > .2f) && GlassFound)
+				{
+					if(diff.getZ() > .2f)
+					{
+						walkForward = true;
+					}
+					if(diff.getZ() < -.2f)
+					{
+						walkBackwards = true;
+					}
+					if(diff.getX() > .2f)
+					{
+						walkLeft = true;
+					}
+					if(diff.getX() < -.2f)
+					{
+						walkRight = true;
+					}
+				}
 			}
 		}
 	}
