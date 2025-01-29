@@ -58,13 +58,19 @@ public class DancefloorBotClient implements ClientModInitializer {
 
 	public static boolean ShouldPunch()
 	{
+		if(punch)
+		{
+			if((System.currentTimeMillis() - onBlockTime) > 330) {
+				return false;
+			}
+		}
 		if(isOnBlock && punch)
 		{
-			if((System.currentTimeMillis() - onBlockTime) < 150)
+			if((System.currentTimeMillis() - onBlockTime) < 250)
 			{
 				return false;
 			}
-			punch = false;
+
 			return true;
 		}
 		return false;
@@ -73,6 +79,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 	public static void EnteredBlock()
 	{
 		onBlockTime = System.currentTimeMillis();
+		System.out.println("Entered Block");
 	}
 
 	public static void LeftBlock()
@@ -104,6 +111,9 @@ public class DancefloorBotClient implements ClientModInitializer {
 		ClientPlayerEntity pe = MinecraftClient.getInstance().player;
 
 		if(pe != null) {
+			if(DancefloorBotClient.botEnabled)
+			{
+			}
 			if(botEnabled)pe.setYaw(0);
 			found_glass = false;
 			for (int y = -2; y < 2; y++)
@@ -135,7 +145,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 				double uwu = Math.atan2(a.getZ() - (b.getZ() + .5f), a.getX() - (b.getX() + .5f));
 				uwu *= 180;
 				uwu /= Math.PI;
-				MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()+" YAW: "+uwu),true);
+
 				//pe.setYaw((float)uwu - 270);
 				Vec3d diff = new Vec3d(b.getX()+.5f,b.getY(),b.getZ()+.5f).subtract(a);
 				diff = new Vec3d(Math.min(1,diff.getX()),Math.min(1,diff.getY()),Math.min(1,diff.getZ()));
@@ -190,6 +200,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 	{
 		sneak = false;
 		jump = false;
+		punch = false;
 		MinecraftClient.getInstance().player.sendMessage(txt,true);
 		String t = txt.getLiteralString();
 		if (t.toLowerCase().contains("sneak"))
