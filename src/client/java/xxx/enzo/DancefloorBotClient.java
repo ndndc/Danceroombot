@@ -38,6 +38,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 
 	public static boolean jump = false;
 	public static boolean sneak = false;
+	public static boolean punch = false;
 
 	public static boolean ShouldSneak()
 	{
@@ -161,6 +162,21 @@ public class DancefloorBotClient implements ClientModInitializer {
 
 	public static void TitelEmpfangen(Text txt)
 	{
+		sneak = false;
+		jump = false;
 		MinecraftClient.getInstance().player.sendMessage(txt,true);
+		String t = txt.getLiteralString();
+		if (t.contains("Sneak!"))
+		{
+			sneak = true;
+		}
+		if (t.contains("Jump!"))
+		{
+			jump = true;
+		}
+		if (t.contains("Punch!"))
+		{
+			punch = true;
+		}
 	}
 }
