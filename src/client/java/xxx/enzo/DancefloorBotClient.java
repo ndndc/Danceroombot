@@ -27,10 +27,12 @@ import org.lwjgl.glfw.GLFW;
 
 public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean GlassFound = false;
-	public static BlockPos BlockPosition = new BlockPos(0,0,0);
+	public static BlockPos BlockPosition = new BlockPos(0, 0, 0);
+	private static boolean botEnabled = false; // Variable to track bot status
 	public static boolean walkForward = false;
 
 	private static void onStartTick(MinecraftServer server) {
+		if (!botEnabled) return; // Only execute if bot is enabled
 
 		BlockPos closest_glass = new BlockPos(0, 0, 0);
 		boolean found_glass = false;
@@ -78,8 +80,6 @@ public class DancefloorBotClient implements ClientModInitializer {
 		}
 	}
 
-
-
 	@Override
 	public void onInitializeClient() {
 		ServerTickEvents.START_SERVER_TICK.register(DancefloorBotClient::onStartTick);
@@ -93,7 +93,8 @@ public class DancefloorBotClient implements ClientModInitializer {
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (myKeyBinding.wasPressed()) {
-				client.player.sendMessage(Text.of("DancefloorBot Toggled"),true);
+				botEnabled = !botEnabled; // Toggle bot status
+				client.player.sendMessage(Text.of("DancefloorBot " + (botEnabled ? "Enabled" : "Disabled")), true);
 			}
 		});
 	}
