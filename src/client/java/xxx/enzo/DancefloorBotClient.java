@@ -11,8 +11,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.entity.MovementType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
+import net.minecraft.util.PlayerInput;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -55,12 +57,18 @@ public class DancefloorBotClient implements ClientModInitializer {
 				Vec3d a = pe.getPos();
 				//Set b
 				BlockPos b = BlockPosition;
-				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() - .5f));
+				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() + .5f));
 				uwu *= 180;
 				uwu /= Math.PI;
 				MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()+" YAW: "+uwu),true);
-				pe.setYaw((float)uwu - 270);
-
+				//pe.setYaw((float)uwu - 270);
+				Vec3d diff = new Vec3d(b.getX()+.5f,b.getY(),b.getZ()+.5f).subtract(a);
+				diff = new Vec3d(Math.min(1,diff.getX()),Math.min(1,diff.getY()),Math.min(1,diff.getZ()));
+				pe.setYaw((float)uwu-270.0f);
+				if(diff.getX() > 0 && diff.getZ() > 0)
+				{
+					pe.input.playerInput.forward();
+				}
 			}
 		}
 	}
