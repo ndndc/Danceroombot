@@ -65,15 +65,15 @@ public class DancefloorBotClient implements ClientModInitializer {
 				Vec3d a = pe.getPos();
 				//Set b
 				BlockPos b = BlockPosition;
-				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() - .5f));
+				double uwu = Math.atan2(a.getZ() - (b.getZ() + .5f), a.getX() - (b.getX() + .5f));
 				uwu *= 180;
 				uwu /= Math.PI;
 				MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()+" YAW: "+uwu),true);
 				//pe.setYaw((float)uwu - 270);
-				Vec3d diff = new Vec3d(b.getX(),b.getY(),b.getZ()).subtract(a);
+				Vec3d diff = new Vec3d(b.getX()+.5f,b.getY(),b.getZ()+.5f).subtract(a);
 				diff = new Vec3d(Math.min(1,diff.getX()),Math.min(1,diff.getY()),Math.min(1,diff.getZ()));
 				pe.setYaw((float)uwu-270.0f);
-				walkForward = ((Math.abs(diff.getX()) < .1f && Math.abs(diff.getZ()) < .1f) && GlassFound);
+				walkForward = ((Math.abs(diff.getX()) > .2f || Math.abs(diff.getZ()) > .2f) && GlassFound);
 			}
 		}
 	}
