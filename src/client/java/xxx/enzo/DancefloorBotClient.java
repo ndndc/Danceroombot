@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.GameRenderer;
@@ -27,6 +28,7 @@ import org.lwjgl.glfw.GLFW;
 public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean GlassFound = false;
 	public static BlockPos BlockPosition = new BlockPos(0,0,0);
+	public static boolean walkForward = false;
 
 	private static void onStartTick(MinecraftServer server) {
 
@@ -36,6 +38,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 		ClientPlayerEntity pe = MinecraftClient.getInstance().player;
 
 		if(pe != null) {
+			found_glass = false;
 			for (int y = -2; y < 2; y++)
 				for (int x = -7; x < 7; x++)
 					for (int z = -7; z < 7; z++) {
@@ -55,25 +58,22 @@ public class DancefloorBotClient implements ClientModInitializer {
 		}
 		GlassFound = found_glass;
 		BlockPosition = closest_glass;
-
+		walkForward = false;
 		if(GlassFound) {
 			if(pe != null) {
 				//Set a
 				Vec3d a = pe.getPos();
 				//Set b
 				BlockPos b = BlockPosition;
-				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() + .5f));
+				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() - .5f));
 				uwu *= 180;
 				uwu /= Math.PI;
 				MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()+" YAW: "+uwu),true);
 				//pe.setYaw((float)uwu - 270);
-				Vec3d diff = new Vec3d(b.getX()+.5f,b.getY(),b.getZ()+.5f).subtract(a);
+				Vec3d diff = new Vec3d(b.getX(),b.getY(),b.getZ()).subtract(a);
 				diff = new Vec3d(Math.min(1,diff.getX()),Math.min(1,diff.getY()),Math.min(1,diff.getZ()));
 				pe.setYaw((float)uwu-270.0f);
-				if(diff.getX() > 0 && diff.getZ() > 0)
-				{
-					pe.input.playerInput.forward();
-				}
+				walkForward = ((Math.abs(diff.getX()) < .1f && Math.abs(diff.getZ()) < .1f) && GlassFound);
 			}
 		}
 	}
