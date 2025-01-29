@@ -63,6 +63,14 @@ public class KeyboardInputMixin {
                     info.cancel();
                 }
             }
+
+            if(key == MinecraftClient.getInstance().options.attackKey)
+            {
+                if(DancefloorBotClient.ShouldPunch() && DancefloorBotClient.botEnabled) {
+                    info.setReturnValue(true);
+                    info.cancel();
+                }
+            }
         }
     }
 }

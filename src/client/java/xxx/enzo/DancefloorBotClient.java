@@ -39,6 +39,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean jump = false;
 	public static boolean sneak = false;
 	public static boolean punch = false;
+	public static long onBlockTime = 0;
 
 	public static boolean ShouldSneak()
 	{
@@ -55,9 +56,23 @@ public class DancefloorBotClient implements ClientModInitializer {
 		return false;
 	}
 
+	public static boolean ShouldPunch()
+	{
+		if(isOnBlock && punch)
+		{
+			if((System.currentTimeMillis() - onBlockTime) < 150)
+			{
+				return false;
+			}
+			punch = false;
+			return true;
+		}
+		return false;
+	}
+
 	public static void EnteredBlock()
 	{
-
+		onBlockTime = System.currentTimeMillis();
 	}
 
 	public static void LeftBlock()
@@ -168,6 +183,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 				client.player.sendMessage(Text.of("DancefloorBot " + (botEnabled ? "Enabled" : "Disabled")), true);
 			}
 		});
+
 	}
 
 	public static void TitelEmpfangen(Text txt)
