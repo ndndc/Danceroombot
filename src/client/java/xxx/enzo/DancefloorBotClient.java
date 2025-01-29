@@ -33,6 +33,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean walkBackwards = false;
 	public static boolean walkLeft = false;
 	public static boolean walkRight = false;
+	public static boolean isOnBlock = false;
 
 	private static void onStartTick(MinecraftServer server) {
 		walkForward = false;
@@ -84,6 +85,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 				diff = new Vec3d(Math.min(1,diff.getX()),Math.min(1,diff.getY()),Math.min(1,diff.getZ()));
 				//pe.setYaw((float)uwu-270.0f);
 
+				isOnBlock = !((Math.abs(diff.getX()) > .2f || Math.abs(diff.getZ()) > .2f) && GlassFound);
 
 				if((Math.abs(diff.getX()) > .2f || Math.abs(diff.getZ()) > .2f) && GlassFound)
 				{
