@@ -129,6 +129,6 @@ public class DancefloorBotClient implements ClientModInitializer {
 
 	public static void TitelEmpfangen(Text txt)
 	{
-
+		MinecraftClient.getInstance().player.sendMessage(txt,true);
 	}
 }
