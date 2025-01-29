@@ -34,6 +34,25 @@ public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean walkLeft = false;
 	public static boolean walkRight = false;
 	public static boolean isOnBlock = false;
+	public static boolean enterBlock = false;
+
+	public static boolean jump = false;
+	public static boolean sneak = false;
+
+	public static boolean ShouldSneak()
+	{
+		return isOnBlock && sneak;
+	}
+
+	public static boolean ShouldJump()
+	{
+		return isOnBlock && jump;
+	}
+
+	public static void EnteredBlock()
+	{
+
+	}
 
 	private static void onStartTick(MinecraftServer server) {
 		walkForward = false;
@@ -41,6 +60,17 @@ public class DancefloorBotClient implements ClientModInitializer {
 		walkLeft = false;
 		walkRight = false;
 		if (!botEnabled) return; // Only execute if bot is enabled
+
+		if(isOnBlock)
+		{
+			if(!enterBlock)
+			{
+				EnteredBlock();
+				enterBlock = true;
+			}
+		}else{
+			enterBlock = false;
+		}
 
 		BlockPos closest_glass = new BlockPos(0, 0, 0);
 		boolean found_glass = false;
