@@ -192,15 +192,15 @@ public class DancefloorBotClient implements ClientModInitializer {
 		jump = false;
 		MinecraftClient.getInstance().player.sendMessage(txt,true);
 		String t = txt.getLiteralString();
-		if (t.contains("Sneak!"))
+		if (t.toLowerCase().contains("sneak"))
 		{
 			sneak = true;
 		}
-		if (t.contains("Jump!"))
+		if (t.toLowerCase().contains("jump"))
 		{
 			jump = true;
 		}
-		if (t.contains("Punch!"))
+		if (t.toLowerCase().contains("punch"))
 		{
 			punch = true;
 		}
