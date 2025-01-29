@@ -2,6 +2,8 @@ package xxx.enzo;
 
 import com.mojang.brigadier.Message;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Block;
@@ -9,12 +11,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.glfw.GLFW;
 
 public class DancefloorBotClient implements ClientModInitializer {
 	public static boolean GlassFound = false;
@@ -26,6 +32,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 		boolean found_glass = false;
 
 		ClientPlayerEntity pe = MinecraftClient.getInstance().player;
+
 		if(pe != null) {
 			for (int y = -2; y < 2; y++)
 				for (int x = -7; x < 7; x++)
@@ -48,7 +55,18 @@ public class DancefloorBotClient implements ClientModInitializer {
 		BlockPosition = closest_glass;
 
 		if(GlassFound) {
-			MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()),true);
+			if(pe != null) {
+				//Set a
+				Vec3d a = pe.getPos();
+				//Set b
+				BlockPos b = BlockPosition;
+				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() - .5f));
+				uwu *= 180;
+				uwu /= Math.PI;
+				MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()+" YAW: "+uwu),true);
+				pe.setYaw((float)uwu - 270);
+
+			}
 		}
 	}
 
@@ -58,6 +76,17 @@ public class DancefloorBotClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ServerTickEvents.START_SERVER_TICK.register(DancefloorBotClient::onStartTick);
 		WorldRenderEvents.AFTER_ENTITIES.register(after_entities -> {
+		});
+		KeyBinding myKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"key.dancefloorbot.toggle",
+				InputUtil.Type.KEYSYM,
+				GLFW.GLFW_KEY_O,
+				"category.dancefloorbot.general"
+		));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (myKeyBinding.wasPressed()) {
+				client.player.sendMessage(Text.of("DancefloorBot Toggled"),true);
+			}
 		});
 	}
 }
