@@ -11,7 +11,7 @@ import xxx.enzo.DancefloorBotClient;
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
     @Inject(at = @At("TAIL"), method = "onTitle")
-    public void onTitle(CallbackInfo info, TitleS2CPacket packet) {
+    public void onTitle( TitleS2CPacket packet,CallbackInfo info) {
         DancefloorBotClient.TitelEmpfangen(packet.text());
     }
 }
