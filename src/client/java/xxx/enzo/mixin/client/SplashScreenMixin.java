@@ -1,7 +1,9 @@
 package xxx.enzo.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.SplashTextRenderer;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +20,5 @@ public class SplashScreenMixin {
     private static Text COPYRIGHT;
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo info) {
-
     }
 }
