@@ -47,10 +47,20 @@ public class DancefloorBotClient implements ClientModInitializer {
 
 	public static boolean ShouldJump()
 	{
-		return isOnBlock && jump;
+		if(isOnBlock && jump)
+		{
+			jump = false;
+			return true;
+		}
+		return false;
 	}
 
 	public static void EnteredBlock()
+	{
+
+	}
+
+	public static void LeftBlock()
 	{
 
 	}

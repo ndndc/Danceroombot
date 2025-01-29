@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xxx.enzo.DancefloorBot;
 import xxx.enzo.DancefloorBotClient;
 
 @Mixin(KeyBinding.class)
@@ -43,6 +44,21 @@ public class KeyboardInputMixin {
 
             if (key == MinecraftClient.getInstance().options.rightKey) {
                 if (DancefloorBotClient.walkRight && DancefloorBotClient.botEnabled) {
+                    info.setReturnValue(true);
+                    info.cancel();
+                }
+            }
+
+            if(key == MinecraftClient.getInstance().options.sneakKey) {
+                if(DancefloorBotClient.ShouldSneak() && DancefloorBotClient.botEnabled) {
+                    info.setReturnValue(true);
+                    info.cancel();
+                }
+            }
+
+            if (key == MinecraftClient.getInstance().options.jumpKey)
+            {
+                if(DancefloorBotClient.ShouldJump() && DancefloorBotClient.botEnabled) {
                     info.setReturnValue(true);
                     info.cancel();
                 }
