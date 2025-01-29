@@ -14,6 +14,7 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class DancefloorBotClient implements ClientModInitializer {
@@ -26,6 +27,7 @@ public class DancefloorBotClient implements ClientModInitializer {
 		boolean found_glass = false;
 
 		ClientPlayerEntity pe = MinecraftClient.getInstance().player;
+
 		if(pe != null) {
 			for (int y = -2; y < 2; y++)
 				for (int x = -7; x < 7; x++)
@@ -48,7 +50,18 @@ public class DancefloorBotClient implements ClientModInitializer {
 		BlockPosition = closest_glass;
 
 		if(GlassFound) {
-			MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()),true);
+			if(pe != null) {
+				//Set a
+				Vec3d a = pe.getPos();
+				//Set b
+				BlockPos b = BlockPosition;
+				double uwu = Math.atan2(a.getZ() - (b.getZ() - .5f), a.getX() - (b.getX() - .5f));
+				uwu *= 180;
+				uwu /= Math.PI;
+				MinecraftClient.getInstance().player.sendMessage(Text.of("Glass found At " + BlockPosition.toString()+" YAW: "+uwu),true);
+				pe.setYaw((float)uwu - 270);
+
+			}
 		}
 	}
 
