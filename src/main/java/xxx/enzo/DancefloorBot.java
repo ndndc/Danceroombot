@@ -20,5 +20,6 @@ public class DancefloorBot implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
+
 	}
 }
